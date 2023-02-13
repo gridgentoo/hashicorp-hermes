@@ -13,7 +13,11 @@ import {
 } from "@algolia/client-search";
 import { assert } from "@ember/debug";
 import ConfigService from "./config";
-import { FacetDropdownObjectDetails, FacetRecord, FacetRecords } from "hermes/types/facets";
+import {
+  FacetDropdownObjectDetails,
+  FacetRecord,
+  FacetRecords,
+} from "hermes/types/facets";
 import FetchService from "./fetch";
 import SessionService from "./session";
 
@@ -29,7 +33,6 @@ export default class AlgoliaService extends Service {
   @service("fetch") declare fetchSvc: FetchService;
   @service declare session: SessionService;
   @service declare authenticatedUser: AuthenticatedUserService;
-
 
   /**
    * A shorthand getter for the authenticatedUser's email.

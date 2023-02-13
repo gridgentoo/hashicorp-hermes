@@ -102,12 +102,7 @@
               {{/unless}}
             </:default>
             <:editing as |F|>
-              <Hds::Form::Textarea::Field
-                @value={{F.value}}
-                name="title"
-                {{on "blur" F.update}}
-                as |F|
-              />
+              <Hds::Form::Textarea::Field @value={{F.value}} name="title" />
             </:editing>
           </EditableField>
         {{/if}}
@@ -144,12 +139,7 @@
               {{/unless}}
             </:default>
             <:editing as |F|>
-              <Hds::Form::Textarea::Field
-                @value={{F.value}}
-                name="summary"
-                {{on "blur" F.update}}
-                as |F|
-              />
+              <Hds::Form::Textarea::Field @value={{F.value}} name="summary" />
             </:editing>
           </EditableField>
         {{/if}}
@@ -213,12 +203,11 @@
                 <em>No contributors</em>
               {{/if}}
             </:default>
-            <:editing as |F|>
+            <:editing>
               <Inputs::PeopleSelect
                 class="multiselect--narrow"
                 @selected={{this.contributors}}
                 @onChange={{this.updateContributors}}
-                {{click-outside (fn F.update this.contributors)}}
               />
             </:editing>
           </EditableField>
@@ -268,12 +257,11 @@
                   <em>No approvers</em>
                 {{/if}}
               </:default>
-              <:editing as |F|>
+              <:editing>
                 <Inputs::PeopleSelect
                   class="multiselect--narrow"
                   @selected={{this.approvers}}
                   @onChange={{this.updateApprovers}}
-                  {{click-outside (fn F.update this.approvers)}}
                 />
               </:editing>
             </EditableField>
@@ -367,7 +355,6 @@
               class="multiselect--narrow"
               @selected={{this.tags}}
               @onChange={{this.updateTags}}
-              {{click-outside (fn F.update this.tags)}}
             />
           </:editing>
         </EditableField>

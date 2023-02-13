@@ -201,7 +201,6 @@ export default class DocumentSidebar extends Component {
     }
   }
 
-
   @action refreshRoute() {
     // We force refresh due to a bug with `refreshModel: true`
     // See: https://github.com/emberjs/ember.js/issues/19260
@@ -209,7 +208,11 @@ export default class DocumentSidebar extends Component {
   }
 
   @task
-  *save(field, val) {
+  *save(field, val, cachedVal) {
+    if (val === cachedVal) {
+      this[field] = cachedVal;
+      return;
+    }
     if (field && val) {
       const oldVal = this[field];
       this[field] = val;

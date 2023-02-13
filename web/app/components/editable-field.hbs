@@ -1,18 +1,30 @@
-<div class="editable-field" ...attributes {{did-insert this.captureElement}}>
+<div class="editable-field" ...attributes {{did-insert this.captureParentDiv}}>
   {{#if (and this.editing (not @loading))}}
-    <div {{on "keydown" this.preventNewlines}} {{on "keyup" this.cancel}}>
-      {{yield (hash value=@value update=this.update) to="editing"}}
+    <div
+      {{did-insert this.captureEditorDiv}}
+      {{on "keydown" this.maybeUpdate}}
+      {{on "keyup" this.maybeCancel}}
+    >
+      {{yield (hash value=@value) to="editing"}}
+    </div>
+    <div class="flex space-x-2 mt-2">
+      <Hds::Button @text="Save" {{on "click" this.update}} />
+      <Hds::Button
+        @text="Cancel"
+        @color="secondary"
+        {{on "click" this.cancel}}
+      />
     </div>
   {{else}}
     {{#if @loading}}
       <FlightIcon @name="loading" class="loading-indicator" />
     {{/if}}
-    <button
+    <Action
       class="field-toggle {{if @loading 'loading'}}"
       disabled={{or @disabled @loading}}
       {{on "click" this.edit}}
     >
       {{yield}}
-    </button>
+    </Action>
   {{/if}}
 </div>

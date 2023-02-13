@@ -21,11 +21,10 @@
         </p>
       {{/let}}
     </:default>
-    <:editing as |F|>
+    <:editing>
       <Hds::Form::Textarea::Field
         @value={{F.value}}
-        name={{field}}
-        {{on "blur" F.update}}
+        name={{@field}}
         data-test-custom-string-field-input
       />
     </:editing>
@@ -58,12 +57,11 @@
         <CustomEditableFields::EmptyState />
       {{/if}}
     </:default>
-    <:editing as |F|>
+    <:editing>
       <Inputs::PeopleSelect
         class="multiselect--narrow"
         @selected={{this.people}}
         @onChange={{this.updateEmails}}
-        {{click-outside (fn F.update this.emails)}}
         data-test-custom-people-field-input
       />
     </:editing>
