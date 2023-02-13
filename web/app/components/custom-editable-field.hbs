@@ -21,7 +21,7 @@
         </p>
       {{/let}}
     </:default>
-    <:editing>
+    <:editing as |F|>
       <Hds::Form::Textarea::Field
         @value={{F.value}}
         name={{@field}}

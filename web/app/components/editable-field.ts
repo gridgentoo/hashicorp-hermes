@@ -79,7 +79,9 @@ export default class EditableFieldComponent extends Component<EditableFieldCompo
       ev.preventDefault();
       let input = this.editorDiv.querySelector(FOCUSABLE) as HTMLElement;
       assert("input value must exist", "value" in input);
-      this.update(input.value as string);
+      // TODO: accept values other than strings
+      // @ts-ignore
+      this.update(input.value);
     }
   }
 
@@ -90,7 +92,6 @@ export default class EditableFieldComponent extends Component<EditableFieldCompo
     });
 
     if (ev instanceof PointerEvent) {
-      // need to get an array of values of the the .person-email div
       let input = this.editorDiv.querySelector(FOCUSABLE) as HTMLElement;
       assert("input value must exist", "value" in input);
       this.args.onChange?.(input.value as string);
@@ -102,6 +103,7 @@ export default class EditableFieldComponent extends Component<EditableFieldCompo
     } else {
       assert("event target must exist", ev.target);
       assert("event target must have a value", "value" in ev.target);
+      debugger;
       newValue = ev.target.value as string;
     }
 
