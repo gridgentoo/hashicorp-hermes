@@ -7,9 +7,12 @@ const FOCUSABLE =
   'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 export default class EditableField extends Component {
-  @tracked editing = false;
   @tracked element = null;
   @tracked cachedValue = null;
+
+  get editing() {
+    return this.args.isEditing ?? false;
+  }
 
   @action
   captureElement(el) {

@@ -5,6 +5,7 @@
     @onChange={{@onChange}}
     @loading={{@loading}}
     @disabled={{@disabled}}
+    @isEditing={{@isEditing}}
   >
     <:default>
       {{#let (get @document @field) as |documentField|}}
@@ -22,7 +23,7 @@
       {{/let}}
     </:default>
     <:editing as |F|>
-      <Hds::Form::Textarea::Field
+      <Hds::Form::TextInput::Base
         @value={{F.value}}
         name={{field}}
         {{on "blur" F.update}}
@@ -38,6 +39,7 @@
     @onChange={{@onChange}}
     @loading={{@loading}}
     @disabled={{@disabled}}
+    @isEditing={{@isEditing}}
   >
     <:default>
       {{#if this.people.length}}

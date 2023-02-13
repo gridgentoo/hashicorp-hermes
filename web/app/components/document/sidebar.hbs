@@ -42,7 +42,9 @@
       </div>
 
       <div class="flex w-full items-center justify-end space-x-1 pr-1">
-
+        <Action {{on "click" this.toggleEditMode}}>
+          EDIT
+        </Action>
         {{#if this.shareButtonIsShown}}
           <Document::ShareButton @document={{@document}} />
         {{/if}}
@@ -67,17 +69,27 @@
 
     <div class="body {{if this.sidebarBodyIsShorter 'is-shorter'}}">
       <div class="flex flex-col items-start space-y-2 px-3">
-        {{#if (is-empty @document.docNumber)}}
-          <small class="hds-typography-body-100 hds-foreground-faint">{{#unless
-              (is-empty @document.docType)
-            }}{{@document.docType}}{{/unless}}
-          </small>
+        {{#if this.isEditing}}
+          <small
+            class="hds-typography-body-100 hds-foreground-faint"
+          >Title</small>
         {{else}}
-          <small class="hds-typography-body-100 hds-foreground-faint">{{#unless
-              (is-empty @document.docType)
-            }}{{@document.docType}}{{/unless}}
-            &bullet;
-            {{@document.docNumber}}</small>
+          {{#if (is-empty @document.docNumber)}}
+            <small
+              class="hds-typography-body-100 hds-foreground-faint"
+            >{{#unless
+                (is-empty @document.docType)
+              }}{{@document.docType}}{{/unless}}
+            </small>
+          {{else}}
+            <small
+              class="hds-typography-body-100 hds-foreground-faint"
+            >{{#unless
+                (is-empty @document.docType)
+              }}{{@document.docType}}{{/unless}}
+              &bullet;
+              {{@document.docNumber}}</small>
+          {{/if}}
         {{/if}}
         {{#if this.editingIsDisabled}}
           <h1
@@ -89,6 +101,7 @@
             @onChange={{perform this.save "title"}}
             @loading={{this.save.isRunning}}
             @disabled={{this.editingIsDisabled}}
+            @isEditing={{this.isEditing}}
           >
             <:default>
               {{#unless (is-empty this.title)}}
@@ -113,78 +126,86 @@
         {{/if}}
       </div>
 
-      <hr class="border-0 border-b hds-border-faint mx-3" />
+      {{#unless this.isEditing}}
+        <hr class="border-0 border-b hds-border-faint mx-3" />
+      {{/unless}}
 
-      <div class="flex flex-col items-start space-y-2 px-3">
-        <small
-          class="hds-typography-body-100 hds-foreground-faint"
-        >Summary</small>
-        {{#if this.editingIsDisabled}}
-          <p
-            class="hds-typography-body-200 hds-font-weight-medium hds-foreground-primary"
-          >{{this.summary}}</p>
-        {{else}}
-          <EditableField
-            @value={{this.summary}}
-            @onChange={{perform this.save "summary"}}
-            @loading={{this.save.isRunning}}
-            @disabled={{this.editingIsDisabled}}
-          >
-            <:default>
-              {{#unless (is-empty this.summary)}}
-                <p
-                  class="hds-typography-body-200 hds-font-weight-medium hds-foreground-primary"
-                >
-                  {{this.summary}}</p>
-              {{else}}
-                <p
-                  class="hds-typography-body-200 hds-font-weight-medium hds-foreground-faint"
-                >
-                  Enter a summary here.</p>
-              {{/unless}}
-            </:default>
-            <:editing as |F|>
-              <Hds::Form::Textarea::Field
-                @value={{F.value}}
-                name="summary"
-                {{on "blur" F.update}}
-                as |F|
-              />
-            </:editing>
-          </EditableField>
-        {{/if}}
-      </div>
+      {{#if (or this.isEditing this.summary)}}
+        <div class="flex flex-col items-start space-y-2 px-3">
+          {{#unless this.isEditing}}
+            <small
+              class="hds-typography-body-100 hds-foreground-faint"
+            >Summary</small>
+          {{/unless}}
+          {{#if this.editingIsDisabled}}
+            <p
+              class="hds-typography-body-200 hds-font-weight-medium hds-foreground-primary"
+            >{{this.summary}}</p>
+          {{else}}
+            <EditableField
+              @value={{this.summary}}
+              @onChange={{perform this.save "summary"}}
+              @loading={{this.save.isRunning}}
+              @disabled={{this.editingIsDisabled}}
+              @isEditing={{this.isEditing}}
+            >
+              <:default>
+                {{#unless (is-empty this.summary)}}
+                  <p
+                    class="hds-typography-body-200 hds-font-weight-medium hds-foreground-primary"
+                  >
+                    {{this.summary}}</p>
+                {{else}}
+                  <p
+                    class="hds-typography-body-200 hds-font-weight-medium hds-foreground-faint"
+                  >
+                    Enter a summary here.</p>
+                {{/unless}}
+              </:default>
+              <:editing as |F|>
+                <Hds::Form::Textarea::Field
+                  @value={{F.value}}
+                  name="summary"
+                  {{on "blur" F.update}}
+                  as |F|
+                />
+              </:editing>
+            </EditableField>
+          {{/if}}
+        </div>
+      {{/if}}
+      {{#unless this.isEditing}}
+        <div class="flex flex-col items-start space-y-2 px-3">
+          <small
+            class="hds-typography-body-100 hds-foreground-faint"
+          >Status</small>
+          <Doc::State
+            @state={{@document.status}}
+            @hideProgress={{true}}
+            class="whitespace-nowrap"
+          />
+        </div>
 
-      <div class="flex flex-col items-start space-y-2 px-3">
-        <small
-          class="hds-typography-body-100 hds-foreground-faint"
-        >Status</small>
-        <Doc::State
-          @state={{@document.status}}
-          @hideProgress={{true}}
-          class="whitespace-nowrap"
-        />
-      </div>
+        <div class="flex flex-col items-start space-y-2 px-3">
+          <small
+            class="hds-typography-body-100 hds-foreground-faint"
+          >Product/Area</small>
+          <Hds::Badge
+            @text={{@document.product}}
+            @icon={{get-product-id @document.product}}
+          />
+        </div>
 
-      <div class="flex flex-col items-start space-y-2 px-3">
-        <small
-          class="hds-typography-body-100 hds-foreground-faint"
-        >Product/Area</small>
-        <Hds::Badge
-          @text={{@document.product}}
-          @icon={{get-product-id @document.product}}
-        />
-      </div>
-
-      <div class="flex flex-col items-start space-y-2 px-3">
-        <small
-          class="hds-typography-body-100 hds-foreground-faint"
-        >Owner</small>
-        <Person
-          @imgURL={{get @document.ownerPhotos 0}}
-          @email={{get @document.owners 0}}
-        />
-      </div>
+        <div class="flex flex-col items-start space-y-2 px-3">
+          <small
+            class="hds-typography-body-100 hds-foreground-faint"
+          >Owner</small>
+          <Person
+            @imgURL={{get @document.ownerPhotos 0}}
+            @email={{get @document.owners 0}}
+          />
+        </div>
+      {{/unless}}
 
       <div class="flex flex-col items-start space-y-2 px-3">
         <small
@@ -196,6 +217,7 @@
             @onChange={{perform this.save "contributors"}}
             @loading={{this.save.isRunning}}
             @disabled={{this.editingIsDisabled}}
+            @isEditing={{this.isEditing}}
           >
             <:default>
               {{#if this.contributors.length}}
@@ -250,6 +272,7 @@
             @onChange={{perform this.save "approvers"}}
             @loading={{this.save.isRunning}}
             @disabled={{this.editingIsDisabled}}
+            @isEditing={{this.isEditing}}
           >
             <:default>
               {{#if this.approvers.length}}
@@ -293,20 +316,21 @@
           {{/if}}
         {{/if}}
       </div>
+      {{#unless this.isEditing}}
+        <div class="flex flex-col items-start space-y-2 px-3">
+          <small class="hds-typography-body-100 hds-foreground-faint">
+            Created
+          </small>
+          <p>{{or @document.createdDate "Unknown"}}</p>
+        </div>
 
-      <div class="flex flex-col items-start space-y-2 px-3">
-        <small class="hds-typography-body-100 hds-foreground-faint">
-          Created
-        </small>
-        <p>{{or @document.createdDate "Unknown"}}</p>
-      </div>
-
-      <div class="flex flex-col items-start space-y-2 px-3">
-        <small class="hds-typography-body-100 hds-foreground-faint">
-          Last modified
-        </small>
-        <p>{{@document.lastModified}}</p>
-      </div>
+        <div class="flex flex-col items-start space-y-2 px-3">
+          <small class="hds-typography-body-100 hds-foreground-faint">
+            Last modified
+          </small>
+          <p>{{@document.lastModified}}</p>
+        </div>
+      {{/unless}}
 
       {{#each-in this.customEditableFields as |field attributes|}}
         {{#if
@@ -328,6 +352,7 @@
                 @updateFieldValue={{this.updateCustomFieldValue}}
                 @loading={{this.save.isRunning}}
                 @disabled={{this.editingIsDisabled}}
+                @isEditing={{this.isEditing}}
               />
             {{/if}}
           </div>
@@ -388,7 +413,7 @@
       {{/if}}
     </div> --}}
 
-    {{#if this.userHasEditPrivileges}}
+    {{#if (and this.userHasEditPrivileges (not this.isEditing))}}
       <div class="sidebar-footer">
         {{#if (not @document.appCreated)}}
           <div class="px-3 -mb-1">

@@ -23,6 +23,12 @@ export default class DocumentSidebar extends Component {
   @tracked errorTitle = null;
   @tracked errorDescription = null;
 
+  @tracked isEditing = false;
+
+  @action toggleEditMode() {
+    this.isEditing = !this.isEditing;
+  }
+
   get modalContainer() {
     return document.querySelector(".ember-application");
   }
