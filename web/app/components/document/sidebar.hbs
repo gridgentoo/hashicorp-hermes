@@ -173,9 +173,13 @@
         <LinkTo
           @route="authenticated.all"
           @query={{hash product=(array @document.product) page=1}}
-          class="product-area-link"
+          class="no-underline"
         >
-          {{@document.product}}
+          <Hds::Badge
+            @text={{@document.product}}
+            @icon={{or (get-product-id @document.product) "folder"}}
+            class="mix-blend-multiply"
+          />
         </LinkTo>
       </div>
 

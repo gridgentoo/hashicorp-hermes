@@ -93,9 +93,9 @@
   <LinkTo
     @route="authenticated.all"
     @query={{hash product=(array @productArea) page="1"}}
-    class="product-area-link"
+    class="no-underline"
   >
-    {{this.productAreaName}}
+    <Hds::Badge @text={{this.productAreaName}} @icon={{this.productAreaIcon}} />
   </LinkTo>
 
   {{#if @isResult}}
