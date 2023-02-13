@@ -9,9 +9,14 @@ export interface Person {
   photos: { url: string }[];
 }
 
+export interface HermesUser {
+  email: string;
+  imgURL: string;
+}
+
 interface PeopleSelectComponentSignature {
   Args: {
-    selected: Person[];
+    peopleToExclude: HermesUser[];
     onBlur?: () => void;
     onChange: (people: Person[]) => void;
   };
@@ -69,12 +74,18 @@ export default class PeopleSelectComponent extends Component<PeopleSelectCompone
       const peopleJson = await res.json();
 
       if (peopleJson) {
-        this.people = peopleJson.map((p: Person) => {
-          return {
-            email: p.emailAddresses[0]?.value,
-            imgURL: p.photos?.[0]?.url,
-          };
-        });
+        this.people = peopleJson
+          .map((p: Person) => {
+            return {
+              email: p.emailAddresses[0]?.value,
+              imgURL: p.photos?.[0]?.url,
+            };
+          })
+          .filter((p: HermesUser) => {
+            return !this.args.peopleToExclude.some(
+              (e: HermesUser) => e.email === p.email
+            );
+          });
       } else {
         this.people = [];
       }

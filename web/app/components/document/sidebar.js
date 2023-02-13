@@ -201,7 +201,6 @@ export default class DocumentSidebar extends Component {
     }
   }
 
-
   @action refreshRoute() {
     // We force refresh due to a bug with `refreshModel: true`
     // See: https://github.com/emberjs/ember.js/issues/19260
@@ -212,13 +211,14 @@ export default class DocumentSidebar extends Component {
   *save(field, val) {
     if (field && val) {
       const oldVal = this[field];
-      this[field] = val;
+      if (field === "contributors" || field === "approvers") {
+        this[field].push(val);
+      } else {
+        this[field] = val;
+      }
 
       try {
-        const serializedValue = this.emailFields.includes(field)
-          ? val.map((p) => p.email)
-          : val;
-        yield this.patchDocument.perform({ [field]: serializedValue });
+        yield this.patchDocument.perform({ [field]: this.field });
       } catch (err) {
         // revert field value on failure
         this[field] = oldVal;
