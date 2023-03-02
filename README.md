@@ -1,8 +1,8 @@
 Original repository.    
 https://github.com/hashicorp-forge/hermes. 
 
-Hermes: HashiCorp’s Open Source Document Management System
-https://www.youtube.com/watch?v=2SWmEcsL7NU
+Hermes: HashiCorp’s Open Source Document Management System.   
+https://www.youtube.com/watch?v=2SWmEcsL7NU    
 
 Компания HashiCorp, известная разработкой открытых инструментариев Vagrant, Packer, Nomad и Terraform, опубликовала открытую систему управления документами Hermes, предназначенную для координации процессов, связанных с написанием, поиском, обменом, рецензированием и утверждением документов, используемых как в отдельных командах, так и во всей организации. Код проекта написан на языке Go и распространяется под лицензией MPL 2.0. Для разработки web-интерфейса задействована библиотека Ember.js и элементы интерфейса Helios. Данные хранятся в СУБД PostgreSQL.
 
